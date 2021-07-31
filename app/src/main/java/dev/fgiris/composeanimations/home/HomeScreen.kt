@@ -1,24 +1,27 @@
 package dev.fgiris.composeanimations.home
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-private val highLevelApis = listOf(
+private val highLevelAnimationApis = listOf(
     "AnimatedVisibility",
     "AnimatedContent"
 )
 
-private val lowLevelApis = listOf(
+private val lowLevelAnimationApis = listOf(
     "animate*AsState",
     "updateTransition",
     "rememberInfiniteTransition",
@@ -27,33 +30,61 @@ private val lowLevelApis = listOf(
     "DecayAnimation"
 )
 
+@ExperimentalFoundationApi
 @Composable
 fun HomeScreen() {
-    Surface(color = MaterialTheme.colors.background) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxHeight()
-                .fillMaxWidth(),
-            contentPadding = PaddingValues(16.dp)
-        ) {
-            item {
-                Text(text = "High-level APIs")
-            }
+    Scaffold(
+        topBar = { TopAppBar(title = { Text(text = "Compose Animations") }) }
+    ) {
+        HomeScreen(
+            highLevelAnimationApis = highLevelAnimationApis,
+            lowLevelAnimationApis = lowLevelAnimationApis
+        )
+    }
+}
 
-            items(highLevelApis) { item ->
-                Button(onClick = { /*TODO*/ }) {
-                    Text(text = item)
-                }
-            }
+@ExperimentalFoundationApi
+@Composable
+fun HomeScreen(
+    highLevelAnimationApis: List<String>,
+    lowLevelAnimationApis: List<String>
+) {
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        AnimationApisList(
+            scope = this@LazyColumn,
+            header = "High-level Animation APIs",
+            apis = highLevelAnimationApis
+        )
 
-            item {
-                Text(text = "Low-level APIs")
-            }
+        item {
+            Spacer(modifier = Modifier.height(4.dp))
+        }
 
-            items(lowLevelApis) { item ->
-                Button(onClick = { /*TODO*/ }) {
-                    Text(text = item)
-                }
+        AnimationApisList(
+            scope = this@LazyColumn,
+            header = "Low-level APIs",
+            apis = lowLevelAnimationApis
+        )
+    }
+}
+
+@ExperimentalFoundationApi
+fun AnimationApisList(
+    scope: LazyListScope,
+    header: String,
+    apis: List<String>
+) {
+    scope.apply {
+        stickyHeader {
+            Text(text = header)
+        }
+
+        items(apis) { item ->
+            Button(onClick = { /*TODO*/ }) {
+                Text(text = item)
             }
         }
     }
