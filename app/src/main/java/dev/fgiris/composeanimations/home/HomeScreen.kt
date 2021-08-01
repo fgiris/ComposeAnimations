@@ -9,30 +9,33 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import dev.fgiris.composeanimations.MainActions
+import dev.fgiris.composeanimations.data.AnimationApiType
 
 private val highLevelAnimationApis = listOf(
-    "AnimatedVisibility",
-    "AnimatedContent"
+    Pair("AnimatedVisibility", AnimationApiType.ANIMATED_VISIBILITY),
+    Pair("AnimatedContent", AnimationApiType.ANIMATED_CONTENT)
 )
 
 private val lowLevelAnimationApis = listOf(
-    "animate*AsState",
-    "updateTransition",
-    "rememberInfiniteTransition",
-    "Animatable",
-    "TargetBasedAnimation",
-    "DecayAnimation"
+    Pair("animate*AsState", AnimationApiType.ANIMATE_AS_STATE),
+    Pair("updateTransition", AnimationApiType.UPDATE_TRANSITION),
+    Pair("rememberInfiniteTransition", AnimationApiType.REMEMBER_INFINITE),
+    Pair("Animatable", AnimationApiType.ANIMATABLE),
+    Pair("TargetBasedAnimation", AnimationApiType.TARGET_BASED_ANIMATION),
+    Pair("DecayAnimation", AnimationApiType.DECAY_ANIMATION)
 )
 
 @ExperimentalFoundationApi
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navActions: MainActions) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = "Compose Animations") }) }
     ) {
         HomeScreen(
             highLevelAnimationApis = highLevelAnimationApis,
-            lowLevelAnimationApis = lowLevelAnimationApis
+            lowLevelAnimationApis = lowLevelAnimationApis,
+            navActions = navActions
         )
     }
 }
@@ -40,8 +43,9 @@ fun HomeScreen() {
 @ExperimentalFoundationApi
 @Composable
 fun HomeScreen(
-    highLevelAnimationApis: List<String>,
-    lowLevelAnimationApis: List<String>
+    highLevelAnimationApis: List<Pair<String, AnimationApiType>>,
+    lowLevelAnimationApis: List<Pair<String, AnimationApiType>>,
+    navActions: MainActions
 ) {
     LazyColumn(
         contentPadding = PaddingValues(16.dp),
@@ -50,7 +54,8 @@ fun HomeScreen(
         AnimationApisList(
             scope = this@LazyColumn,
             header = "High-level Animation APIs",
-            apis = highLevelAnimationApis
+            apis = highLevelAnimationApis,
+            navActions = navActions
         )
 
         item {
@@ -60,7 +65,8 @@ fun HomeScreen(
         AnimationApisList(
             scope = this@LazyColumn,
             header = "Low-level APIs",
-            apis = lowLevelAnimationApis
+            apis = lowLevelAnimationApis,
+            navActions = navActions
         )
     }
 }
@@ -69,7 +75,8 @@ fun HomeScreen(
 fun AnimationApisList(
     scope: LazyListScope,
     header: String,
-    apis: List<String>
+    apis: List<Pair<String, AnimationApiType>>,
+    navActions: MainActions
 ) {
     scope.apply {
         stickyHeader {
@@ -82,8 +89,12 @@ fun AnimationApisList(
         item { AnimationListDivider() }
 
         items(apis) { item ->
-            Button(onClick = { /*TODO*/ }) {
-                Text(text = item)
+            Button(
+                onClick = {
+                    navActions.navigateToAnimationDetails(item.second)
+                }
+            ) {
+                Text(text = item.first)
             }
         }
     }

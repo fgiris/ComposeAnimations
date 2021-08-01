@@ -1,35 +1,53 @@
 package dev.fgiris.composeanimations
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dev.fgiris.composeanimations.animationdetails.AnimationDetailsScreen
+import dev.fgiris.composeanimations.data.AnimationApiType
 import dev.fgiris.composeanimations.home.HomeScreen
 
 object ComposeAnimationsDestinations {
     const val HOME_ROUTE = "home"
-    const val ANIMATED_VISIBILITY_ROUTE = "animated_visibility"
-    const val ANIMATED_CONTENT_ROUTE = "animated_content"
-    const val ANIMATE_AS_STATE_ROUTE = "animate_as_state"
-    const val UPDATE_TRANSITION_ROUTE = "update_transition"
-    const val REMEMBER_INFINITE_ROUTE = "remember_infinite"
-    const val ANIMATABLE_ROUTE = "animatable"
-    const val TARGET_BASED_ANIMATION_ROUTE = "target_based_animation"
-    const val DECAY_ANIMATION_ROUTE = "decay_animation"
+    const val ANIMATION_DETAILS_ROUTE = "animation_details"
+    const val ANIMATION_DETAILS_KEY = "animation_details_key"
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ComposeAnimationsNavGraph(
     navController: NavHostController = rememberNavController(),
     startDestination: String = ComposeAnimationsDestinations.HOME_ROUTE
 ) {
+    val navActions = remember { MainActions(navController) }
+
     NavHost(
         navController = navController,
         startDestination = startDestination
     ) {
         composable(ComposeAnimationsDestinations.HOME_ROUTE) {
-            HomeScreen()
+            HomeScreen(navActions = navActions)
         }
+        composable(
+            "${ComposeAnimationsDestinations.ANIMATION_DETAILS_ROUTE}/" +
+                    "{${ComposeAnimationsDestinations.ANIMATION_DETAILS_KEY}}"
+        ) {
+            val animationDetailsKey =
+                it.arguments?.getString(ComposeAnimationsDestinations.ANIMATION_DETAILS_KEY)!!
+            AnimationDetailsScreen(animationDetailsKey)
+        }
+    }
+}
+
+class MainActions(navController: NavHostController) {
+    val navigateToAnimationDetails: ((AnimationApiType) -> Unit) = { animationApiType ->
+        navController.navigate(
+            ComposeAnimationsDestinations.ANIMATION_DETAILS_ROUTE +
+                    "/" + animationApiType.name
+        )
     }
 }
