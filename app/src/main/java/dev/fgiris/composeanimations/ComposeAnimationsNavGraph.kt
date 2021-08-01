@@ -7,9 +7,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import dev.fgiris.composeanimations.animationdetails.AnimationDetailsScreen
+import dev.fgiris.composeanimations.ui.animationdetails.AnimationDetailsScreen
 import dev.fgiris.composeanimations.data.AnimationApiType
-import dev.fgiris.composeanimations.home.HomeScreen
+import dev.fgiris.composeanimations.ui.home.HomeScreen
 
 object ComposeAnimationsDestinations {
     const val HOME_ROUTE = "home"

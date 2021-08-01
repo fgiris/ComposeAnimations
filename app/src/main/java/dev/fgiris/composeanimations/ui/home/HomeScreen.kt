@@ -1,4 +1,4 @@
-package dev.fgiris.composeanimations.home
+package dev.fgiris.composeanimations.ui.home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*

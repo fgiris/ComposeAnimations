@@ -1,4 +1,4 @@
-package dev.fgiris.composeanimations.components
+package dev.fgiris.composeanimations.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
