@@ -1,17 +1,11 @@
 package dev.fgiris.composeanimations.home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Button
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -79,8 +73,13 @@ fun AnimationApisList(
 ) {
     scope.apply {
         stickyHeader {
-            Text(text = header)
+            Text(
+                text = header,
+                style = MaterialTheme.typography.h5
+            )
         }
+
+        item { AnimationListDivider() }
 
         items(apis) { item ->
             Button(onClick = { /*TODO*/ }) {
@@ -88,4 +87,12 @@ fun AnimationApisList(
             }
         }
     }
+}
+
+@Composable
+private fun AnimationListDivider() {
+    Divider(
+        modifier = Modifier.padding(bottom = 4.dp),
+        color = MaterialTheme.colors.onSurface.copy(alpha = 0.08f)
+    )
 }
