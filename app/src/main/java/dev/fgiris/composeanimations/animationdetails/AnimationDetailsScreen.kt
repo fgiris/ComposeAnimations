@@ -1,15 +1,23 @@
 package dev.fgiris.composeanimations.animationdetails
 
-import androidx.compose.foundation.layout.PaddingValues
+import android.graphics.Typeface
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.fontResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.core.content.res.ResourcesCompat
 import dev.fgiris.composeanimations.R
+import dev.fgiris.composeanimations.components.CodeBlock
 import dev.fgiris.composeanimations.data.AnimationApiType
 
 @Composable
@@ -69,6 +77,15 @@ fun AnimationDetailsScreen(
             contentPadding = PaddingValues(16.dp)
         ) {
             item { AnimationDescription(description = description) }
+            item { Spacer(modifier = Modifier.height(16.dp)) }
+            item {
+                AnimationCodeBlock(
+                    code = listOf(
+                        "val x = 5",
+                        "var y = 3"
+                    )
+                )
+            }
         }
     }
 }
@@ -79,4 +96,9 @@ fun AnimationDescription(description: String) {
         text = description,
         style = MaterialTheme.typography.body1
     )
+}
+
+@Composable
+fun AnimationCodeBlock(code: List<String>) {
+    CodeBlock(code)
 }
