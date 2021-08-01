@@ -4,12 +4,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.fgiris.composeanimations.R
-import dev.fgiris.composeanimations.ui.components.CodeBlock
 import dev.fgiris.composeanimations.data.AnimationApiType
+import dev.fgiris.composeanimations.ui.animationdemos.*
+import dev.fgiris.composeanimations.ui.components.CodeBlock
 
 @Composable
 fun AnimationDetailsScreen(animationApi: String) {
@@ -52,14 +54,16 @@ fun AnimationDetailsScreen(animationApi: String) {
 
     AnimationDetailsScreen(
         title = stringResource(id = titleRes),
-        description = stringResource(id = descriptionRes)
+        description = stringResource(id = descriptionRes),
+        animationApiType = animationApiType
     )
 }
 
 @Composable
 fun AnimationDetailsScreen(
     title: String,
-    description: String
+    description: String,
+    animationApiType: AnimationApiType
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = title) }) }
@@ -67,8 +71,10 @@ fun AnimationDetailsScreen(
         LazyColumn(
             contentPadding = PaddingValues(16.dp)
         ) {
+            item { AnimationDetailsListHeader(header = "What is it? 🧐") }
             item { AnimationDescription(description = description) }
             item { Spacer(modifier = Modifier.height(16.dp)) }
+            item { AnimationDetailsListHeader(header = "How does it work? ⌨️") }
             item {
                 AnimationCodeBlock(
                     code = listOf(
@@ -77,8 +83,24 @@ fun AnimationDetailsScreen(
                     )
                 )
             }
+            item { Spacer(modifier = Modifier.height(16.dp)) }
+            item { AnimationDetailsListHeader(header = "Demo 📺") }
+            item { AnimationDemo(animationApiType = animationApiType) }
         }
     }
+}
+
+@Composable
+fun AnimationDetailsListHeader(header: String) {
+    Text(
+        text = header,
+        style = MaterialTheme.typography.h5
+    )
+
+    Divider(
+        modifier = Modifier.padding(bottom = 8.dp, top = 4.dp),
+        color = MaterialTheme.colors.onSurface.copy(alpha = 0.08f)
+    )
 }
 
 @Composable
@@ -91,5 +113,47 @@ fun AnimationDescription(description: String) {
 
 @Composable
 fun AnimationCodeBlock(code: List<String>) {
+    Spacer(modifier = Modifier.height(4.dp))
     CodeBlock(code)
+}
+
+@Composable
+fun AnimationDemo(animationApiType: AnimationApiType) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(400.dp)
+    ) {
+        when (animationApiType) {
+            AnimationApiType.ANIMATED_VISIBILITY -> return
+            AnimationApiType.ANIMATED_CONTENT -> return
+            AnimationApiType.ANIMATE_AS_STATE -> {
+                AnimateFloatAsStateCanvas()
+                showTextAtBottom("Click to start animation")
+            }
+            AnimationApiType.UPDATE_TRANSITION -> UpdateTransitionCanvas()
+            AnimationApiType.REMEMBER_INFINITE -> RememberInfiniteTransitionCanvas()
+            AnimationApiType.ANIMATABLE -> {
+                AnimatableCanvas()
+                showTextAtBottom("Click to animate the circle randomly")
+            }
+            AnimationApiType.TARGET_BASED_ANIMATION -> {
+                TargetBasedAnimationCanvas()
+                showTextAtBottom("Click to start and stop the animation")
+            }
+            AnimationApiType.DECAY_ANIMATION -> {
+                DecayAnimationBox()
+                showTextAtBottom("Click to start and stop the animation")
+            }
+        }
+    }
+}
+
+@Composable
+fun BoxScope.showTextAtBottom(text: String) {
+    Text(
+        modifier = Modifier.align(Alignment.TopStart),
+        text = text,
+        style = MaterialTheme.typography.caption
+    )
 }
