@@ -10,6 +10,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.fgiris.composeanimations.R
 import dev.fgiris.composeanimations.data.AnimationApiType
+import dev.fgiris.composeanimations.data.AnimationCodeSamples
 import dev.fgiris.composeanimations.ui.animationdemos.*
 import dev.fgiris.composeanimations.ui.components.CodeBlock
 
@@ -17,45 +18,54 @@ import dev.fgiris.composeanimations.ui.components.CodeBlock
 fun AnimationDetailsScreen(animationApi: String) {
     val animationApiType = AnimationApiType.valueOf(animationApi)
 
-    val (titleRes, descriptionRes) = when (animationApiType) {
-        AnimationApiType.ANIMATED_VISIBILITY -> Pair(
+    val (titleRes, descriptionRes, codeSample) = when (animationApiType) {
+        AnimationApiType.ANIMATED_VISIBILITY -> Triple(
             R.string.animation_details_animated_visibility_title,
-            R.string.animation_details_animated_visibility_description
+            R.string.animation_details_animated_visibility_description,
+            ""
         )
-        AnimationApiType.ANIMATED_CONTENT -> Pair(
+        AnimationApiType.ANIMATED_CONTENT -> Triple(
             R.string.animation_details_animated_content_title,
-            R.string.animation_details_animated_content_description
+            R.string.animation_details_animated_content_description,
+            ""
         )
-        AnimationApiType.ANIMATE_AS_STATE -> Pair(
+        AnimationApiType.ANIMATE_AS_STATE -> Triple(
             R.string.animation_details_animate_as_state_title,
-            R.string.animation_details_animate_as_state_description
+            R.string.animation_details_animate_as_state_description,
+            AnimationCodeSamples.animateAsState
         )
-        AnimationApiType.UPDATE_TRANSITION -> Pair(
+        AnimationApiType.UPDATE_TRANSITION -> Triple(
             R.string.animation_details_update_transition_title,
-            R.string.animation_details_update_transition_description
+            R.string.animation_details_update_transition_description,
+            AnimationCodeSamples.updateTransition
         )
-        AnimationApiType.REMEMBER_INFINITE -> Pair(
+        AnimationApiType.REMEMBER_INFINITE -> Triple(
             R.string.animation_details_remember_infinite_transition_title,
-            R.string.animation_details_remember_infinite_transition_description
+            R.string.animation_details_remember_infinite_transition_description,
+            AnimationCodeSamples.rememberInfiniteTransition
         )
-        AnimationApiType.ANIMATABLE -> Pair(
+        AnimationApiType.ANIMATABLE -> Triple(
             R.string.animation_details_animatable_title,
-            R.string.animation_details_animatable_description
+            R.string.animation_details_animatable_description,
+            AnimationCodeSamples.animatable
         )
-        AnimationApiType.TARGET_BASED_ANIMATION -> Pair(
+        AnimationApiType.TARGET_BASED_ANIMATION -> Triple(
             R.string.animation_details_target_based_animation_title,
-            R.string.animation_details_target_based_animation_description
+            R.string.animation_details_target_based_animation_description,
+            AnimationCodeSamples.targetBasedAnimation
         )
-        AnimationApiType.DECAY_ANIMATION -> Pair(
+        AnimationApiType.DECAY_ANIMATION -> Triple(
             R.string.animation_details_decay_animation_title,
-            R.string.animation_details_decay_animation_description
+            R.string.animation_details_decay_animation_description,
+            AnimationCodeSamples.decayAnimation
         )
     }
 
     AnimationDetailsScreen(
         title = stringResource(id = titleRes),
         description = stringResource(id = descriptionRes),
-        animationApiType = animationApiType
+        animationApiType = animationApiType,
+        codeSample = codeSample
     )
 }
 
@@ -63,7 +73,8 @@ fun AnimationDetailsScreen(animationApi: String) {
 fun AnimationDetailsScreen(
     title: String,
     description: String,
-    animationApiType: AnimationApiType
+    animationApiType: AnimationApiType,
+    codeSample: String
 ) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(text = title) }) }
@@ -77,10 +88,7 @@ fun AnimationDetailsScreen(
             item { AnimationDetailsListHeader(header = "How does it work? ⌨️") }
             item {
                 AnimationCodeBlock(
-                    code = listOf(
-                        "val x = 5",
-                        "var y = 3"
-                    )
+                    code = codeSample
                 )
             }
             item { Spacer(modifier = Modifier.height(16.dp)) }
@@ -112,7 +120,7 @@ fun AnimationDescription(description: String) {
 }
 
 @Composable
-fun AnimationCodeBlock(code: List<String>) {
+fun AnimationCodeBlock(code: String) {
     Spacer(modifier = Modifier.height(4.dp))
     CodeBlock(code)
 }

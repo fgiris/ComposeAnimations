@@ -15,7 +15,7 @@ import androidx.core.content.res.ResourcesCompat
 import dev.fgiris.composeanimations.R
 
 @Composable
-fun CodeBlock(lines: List<String>) {
+fun CodeBlock(code: String) {
     val fontFamily = FontFamily(
         ResourcesCompat.getFont(LocalContext.current, R.font.consolas)!!
     )
@@ -34,10 +34,8 @@ fun CodeBlock(lines: List<String>) {
                 .padding(8.dp)
         ) {
             Column {
-                lines.forEach {
-                    Row {
-                        Text(text = it)
-                    }
+                Row {
+                    Text(text = code)
                 }
             }
         }
