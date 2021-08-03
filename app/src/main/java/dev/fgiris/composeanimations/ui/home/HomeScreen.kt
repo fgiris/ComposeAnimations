@@ -112,9 +112,7 @@ fun AnimationApisList(
         stickyHeader {
             Text(
                 text = header,
-                style = MaterialTheme.typography.subtitle1.copy(
-                    color = Color(0xFF757575)
-                )
+                style = MaterialTheme.typography.subtitle1
             )
         }
 
